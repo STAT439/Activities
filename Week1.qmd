@@ -1,0 +1,75 @@
+---
+title: "Week One: Stat 439 Intro"
+format: pdf
+editor: visual
+---
+
+## This Week
+
+- Course Overview
+- Overview of proportions
+- Overview of contingency tables
+- Overview of generalized linear models
+
+## Next Week
+
+Tuesday: 
+
+- Watch lecture video
+- Submit lecture notes
+
+Thursday:
+
+- Lab 1
+
+---
+
+## Ice Breaker Questions:
+
+1. Name:
+
+2. Major:
+
+3. Night Owl or Early Bird?
+
+4. Favorite thing you did this summer?
+
+5. What is your favorite ice cream place in Bozeman?
+
+\newpage
+
+Your favorite ice cream place is an example of _categorical data_.
+
+\vfill
+
+__Questions #1:__ Given X out of 15 people picked sweet peaks. Assume that this is class is a reasonably representative sample of all MSU students.
+
+- Is there a statistical distribution that corresponds to this framework (X out of 15)?
+
+\vfill
+
+- How do we estimate the proportion of students that preferred Sweet Peaks?
+
+\vfill
+
+- What about uncertainty in that estimate?
+
+\vfill
+
+
+\newpage
+
+__Question #2:__ Do we believe there is an association between night owls and favorite ice cream shop?
+
+\vfill
+
+Let's create a table that summarizes this information.
+
+
+\vfill
+
+__Question #3:__ Assume we also have the number of times per week a person eats ice cream, can we write down a model that uses this information to predict the probability a person picks sweet peaks?
+
+\vfill
+
+
