@@ -6,69 +6,70 @@ editor: visual
 
 ## This Week
 
-- Course Overview
-- Overview of proportions
-- Overview of contingency tables
-- Overview of generalized linear models
+-   Course Overview
+-   Overview of proportions
+-   Overview of contingency tables
+-   Overview of generalized linear models
 
 ## Next Week
 
-Tuesday: 
+Tuesday:
 
-- Watch lecture video
-- Submit lecture notes
+-   Submit HW 1 (Dreams, Hopes, and Aspirations assignment)
+-   Week 2 activity
 
 Thursday:
 
-- Lab 1
+-   Lab 1
 
----
+------------------------------------------------------------------------
 
 ## Ice Breaker Questions:
 
-1. Name:
+1.  Name:
 
-2. Major:
+2.  Major:
 
-3. Night Owl or Early Bird?
+3.  Night Owl or Early Bird?
 
-4. Favorite thing you did this summer?
+4.  Favorite thing you did this summer?
 
-5. What is your favorite ice cream place in Bozeman?
-
-\newpage
-
-Your favorite ice cream place is an example of _categorical data_.
-
-\vfill
-
-__Questions #1:__ Given X out of 15 people picked sweet peaks. Assume that this is class is a reasonably representative sample of all MSU students.
-
-- Is there a statistical distribution that corresponds to this framework (X out of 15)?
-
-\vfill
-
-- How do we estimate the proportion of students that preferred Sweet Peaks?
-
-\vfill
-
-- What about uncertainty in that estimate?
-
-\vfill
-
+5.  What is your favorite ice cream place in Bozeman?
 
 \newpage
 
-__Question #2:__ Do we believe there is an association between night owls and favorite ice cream shop?
+Your favorite ice cream place is an example of *categorical data*.
+
+\vfill
+
+**Questions #1:** Given X out of 15 people picked Sweet Peaks. Assume that this is class is a reasonably representative sample of all MSU students.
+
+-   Is there a statistical distribution that corresponds to this framework (X out of 15)?
+
+
+\vfill
+
+-   How do we estimate the proportion of students that preferred Sweet Peaks?
+
+
+\vfill
+
+-   What about uncertainty in that estimate?
+
+
+\vfill
+
+\newpage
+
+**Question #2:** Do we believe there is an association between night owls and favorite ice cream shop?
 
 \vfill
 
 Let's create a table that summarizes this information.
 
-
 \vfill
 
-__Question #3:__ Assume we also have the number of times per week a person eats ice cream, can we write down a model that uses this information to predict the probability a person picks sweet peaks?
+**Question #3:** Assume we also have the number of times per week a person eats ice cream, can we write down a model that uses this information to predict the probability a person picks sweet peaks?
 
 \vfill
 
