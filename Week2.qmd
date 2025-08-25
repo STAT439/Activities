@@ -19,9 +19,9 @@ Tuesday:
 
 Thursday:
 
--   Lab 2
+-   Lab 1
 
----------------------------------------------------------------------------
+------------------------------------------------------------------------
 
 #### Binomial Distribution
 
@@ -31,23 +31,25 @@ This data can be modeled with a Binomial distribution, where
 
 $$P(Y= y) = \frac{n!}{y!(n-y)!}\pi^y(1-\pi)^{n-y}, \;\; \text{ where } y = 0, 1, 2, ...$$
 
-__Q:__ Why do we care? 
+**Q:** Why do we care?
 
 \newpage
 
 Given a binomial distribution with specified n and $\pi$, we can estimate to probability of observing a number of successes. This is my 10th year at MSU and their have been 8 Cat-Griz football games.
 
-__Exercise:__ Assume that there is no difference in team ability ($\pi= \frac{1}{2}$).
+**Exercise:** Assume that there is no difference in team ability ($\pi= \frac{1}{2}$).
 
-- 1. Estimate the probability that MSU wins the 2025 game.
+-   
 
+    1.  Estimate the probability that MSU wins the 2025 game.
 
-- 2. Estimate the probability that MSU won 6 of 8 games, hint: `dbinom`.
+-   
 
+    2.  Estimate the probability that MSU won 6 of 8 games, hint: `dbinom`.
 
-- 3. Create a figure to show the probability that MSU won 0, 1, ..., 8 games.
+-   
 
-
+    3.  Create a figure to show the probability that MSU won 0, 1, ..., 8 games.
 
 \newpage
 
@@ -82,13 +84,13 @@ Construct a likelihood profile for the Cat-Griz setting.
 
 Testing and estimation are two related, but different things.
 
-![Testing: Yes or No](gladiator.jpeg){width=300}
+![Testing: Yes or No](gladiator.jpeg){width="300"}
 
-![Estimation: What values are reasonable](measure.jpg){width=300}
+![Estimation: What values are reasonable](measure.jpg){width="300"}
 
-- Traditionally much of applied statistics was focused on testing and associated p-values.
+-   Traditionally much of applied statistics was focused on testing and associated p-values.
 
-- In this class, we will talk about both but testing and estimation but emphasis will be on estimation.
+-   In this class, we will talk about both but testing and estimation but emphasis will be on estimation.
 
 \newpage
 
@@ -97,8 +99,6 @@ Testing and estimation are two related, but different things.
 Given the record of the Bobcats (6 wins in 8 games) over the last 10 years, we may question whether the ability level of the teams is actually the same.
 
 This could be formulated as a testing problem in which we ask how unusual would it be for the bobcasts to win 6 out of 8 games if the teams had the same ability level. Note the similarity to the previously created figure.
-
-
 
 The `binom.test()` function can be used for this purpose, interpret the results.
 
@@ -120,19 +120,15 @@ Use this framework to construct a confidence interval for $\pi$ in our ice cream
 
 \vfill
 
-There are some known issues with this procedure that we will explore in the future, but as a thought exercise 
+There are some known issues with this procedure that we will explore in the future, but as a thought exercise
 
-- What do the intervals look like when Y = 0?
-
-
+-   What do the intervals look like when Y = 0?
 
 \vfill
 
-- What happens when n is small?
-
+-   What happens when n is small?
 
 \vfill
-
 
 \newpage
 
@@ -143,6 +139,5 @@ Thus far, we have simplified the ice cream example to a binary situation (Sweet 
 However, the data was collected as a multicategory setting with many possible answers.
 
 An extension to the binomial distribution, known as the multinomial distribution is appropriate in this case.
-
 
 $$P(Y_1= y_1, Y_2 = y_2, ..., Y_k = y_k) = \frac{n!}{y_1!y_2!...y_k!}\pi_1^{y_1}\pi_2^{y_2}...\pi_k^{y_k}  , \;\; \text{ where } y_i = 0, 1, 2, ...$$
