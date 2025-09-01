@@ -1,0 +1,204 @@
+---
+title: "Week Three"
+format: pdf
+editor: source
+---
+
+## Last Week
+
+- Inference for Proportions
+  - Statistical probability distributions (Binomial & Multinomial)
+  - MLE estimation for parameters
+  - Estimation vs. Testing
+  
+- Bayesian Primer Video
+  - Prior Distributions
+  - Beta Distribution (for proportions)
+  - Posteriors Distributions
+  
+## This Week: Bayesian Inference for Proportions
+
+Today:
+
+- Activity 2
+
+    -   Bayesian Inference for Binomial & Multinomial Distributions
+    -   Bayesian Inference vs. Maximum Likelihood Estimation
+
+- Thursday: Lab 2
+
+## Next Week: Contingency Tables
+
+for Tuesday:
+
+-   Watch Week 3 videos and submit HW 3 (video notes)
+
+------------------------------------------------------------------------
+
+#### Bayesian Inference Overview
+
+The Bayesian statistics paradigm follows three basic steps.
+
+1. Specify prior belief (distribution) about model parameters.
+
+\vfill
+
+2. Collect data (assumed to follow statistical probability distribution: Likelihood)
+
+\vfill
+
+3. Posterior distribution defined by Bayes rule: Prior + Likelihood $\rightarrow$ Posterior
+
+\vfill
+
+\newpage
+
+#### Beta Distribution (Priors)
+
+For modeling binary categorical data, we have seen how the binomial distribution is useful. The parameter we hope to estimate is $\pi$, which is restricted to be between 0 and 1.
+
+\vfill
+
+The beta distribution is a good distribution for this case.
+
+$p(x) = \frac{\Gamma(\alpha) \Gamma(\beta)}{\Gamma(\alpha +\beta)} x^{\alpha-1} (1-x) ^{\beta-1}$, x $\in [0,1]$
+
+\vfill
+
+What are the parameters in this distribution (and what are the moments- mean & variance)?
+
+
+How do they impact the shape of the distribution? Overlay curves with a wide range of parameter values.
+
+
+
+\newpage
+
+#### Bayesian Estimation for Binary Data
+
+On the first day of class, we intuitively estimated $\pi$ for the ice cream problem to be $\frac{7}{16}=$ `r round(7/16, 2)`, which was also the MLE.
+
+\vfill
+
+In this setting, the posterior distribution is exactly defined to be a Beta distribution with parameters $y + \alpha$ and $N - y + \beta$.
+
+\vfill
+
+Let's visualize this setting with a set of different prior distributions and add the posterior mean and MLE.
+
+- Beta(.01, .01)
+
+
+- Beta(1, 1)
+
+
+
+- Beta(7, 3)
+
+
+
+
+\newpage
+
+#### Estimation: Bayesian Uncertainty intervals
+
+Unlike a likelihood profile, with a Bayesian posterior distribution there is a natural way to obtain a 95% (or other level) uncertainty interval.
+
+\vfill
+
+Consider the posterior generated using a beta(.01, .01) prior, a Beta(7.01, 9.01) distribution. We can can simply trim the quantiles from the distribution. So the 95% interval boundaries are at `r round(qbeta(.025, 7.01, 9.01),2)` and `r round(qbeta(.975, 7.01, 9.01),2)`.
+
+```{r}
+#| echo: false
+#| fig-align: center
+#| fig-height: 6
+#| fig-width: 8
+#| message: false
+library(tidyverse)
+alpha <- .01
+beta <- .01
+pi_vals <- seq(0, 1, by = .001)
+n <- length(pi_vals)
+prior_vals <- dbeta(pi_vals, alpha,  beta)
+posterior_vals <- dbeta(pi_vals, 7 + alpha, 9 + beta)
+tibble(pi = rep(pi_vals,2), 
+       vals = c(prior_vals, posterior_vals),
+       type = rep(c('prior', 'posterior'), each = n))|>
+  ggplot(aes(y = vals, x = pi, color = type)) + 
+  geom_line() +
+  theme_bw() +
+  xlab(expression(pi)) +
+  ggtitle("Posterior for pi with 7/16 for Sweet Peaks \n and Beta(.01,.01) prior") +
+  theme(legend.position = "bottom") + 
+  geom_vline(xintercept = qbeta(.025, 7.01, 9.01)) +
+  geom_vline(xintercept = qbeta(.975, 7.01, 9.01)) +
+  ylab('')
+```
+
+\vfill
+
+Is this the only possible interval?
+
+\vfill
+
+\newpage
+
+#### Multicategory Outcomes
+
+Thus far, we have simplified the ice cream example to a binary situation (Sweet Peaks or not).
+
+However, the data was collected as a multicategory setting with many possible answers.
+
+An extension to the binomial distribution, known as the multinomial distribution is appropriate in this case.
+
+$$P(Y_1= y_1, Y_2 = y_2, ..., Y_k = y_k) = \frac{n!}{y_1!y_2!...y_k!}\pi_1^{y_1}\pi_2^{y_2}...\pi_k^{y_k}  , \;\; \text{ where } y_i = 0, 1, 2, ...$$
+\vfill
+
+To estimate the parameters in this distribution we can use a Dirichlet distribution as a prior distribution, which is a multivariate extension to the beta distribution. 
+
+$p(x) = \frac{\prod_i \Gamma(\alpha_i) }{\Gamma(\sum_i \alpha_i )} \prod_i \pi_i^{\alpha_i-1}$, \pi_i $\in [0,1]$
+
+\vfill
+
+Given the similarities to the previous example, what do you anticipate the form of the posterior distribution would look like in this case with multinomial data and a dirichlet prior.
+
+\vfill
+
+
+\newpage
+
+Recall our data from the first day of class where we had the following data.
+
+- Sweet Peaks 7
+- Big Dipper 2
+- Ben and Jerry's 2
+- DQ 1
+- Coldstone 1
+- Wendys 1
+
+So that we can visualize the distribution, lets consider just three options: Sweet Peaks, Big Dipper, and Ben and Jerry's.
+
+Here is a prior distribution, given a Dirichlet prior where $\alpha_i = 1$.
+
+```{r}
+#| message: false
+#| warning: false
+# Code modified from Google Gemini
+library(ggtern)
+library(MCMCpack)
+
+
+dirichlet_samples <- as_tibble(rdirichlet(10000, c(1, 1, 1))) 
+colnames(dirichlet_samples) <- c('SP', 'BD', 'BJ')
+
+
+# Plot the Dirichlet distribution on a ternary plot
+ggtern(data = dirichlet_samples, aes(x = SP, y = BD, z = BJ)) +
+  geom_point(alpha = 0.25, size = 1) +
+  labs(title = "Dirichlet Distribution for (1, 1, 1)",
+       Tlab = "x1", Llab = "x2", Rlab = "x3") +
+  theme_bw()
+```
+
+Modify this code to construct a posterior distribution and interpret the figure. Also think about mean and uncertainty estimates.
+
