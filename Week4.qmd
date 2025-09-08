@@ -1,0 +1,263 @@
+---
+title: "Week Four"
+format: pdf
+editor: source
+editor_options: 
+  chunk_output_type: console
+---
+
+## Last Week
+
+- Bayesian Inference for Binomial & Multinomial Distributions
+- Bayesian Inference vs. Maximum Likelihood Estimation
+
+
+- Contingency Table Primer Video
+  - Contingency Table Overview: multiple categorical variables
+  - joint, marginal, and conditional probabilities
+
+## This Week: Contingency Tables
+
+Today:
+
+- Activity
+
+    - Comparing Proportions: Relative Risk & Odds Ratios
+    - Chi-Squared Tests for Independence
+
+- Thursday: Lab 
+
+## Next Week: More Contingency Tables
+
+
+------------------------------------------------------------------------
+```{r}
+#| include: false
+library(tidyverse)
+library(knitr)
+```
+
+\newpage
+
+#### Comparing Proportions
+
+Consider two binary variables. As an example, participants are given ice cream from either sweet peaks or genuine and asked whether it was delicious (5 stars). Note: this could be displayed in a 2 X 2 contingency table.
+
+
+
+|         | Yes   | NO    |     |
+|---------|:-----|------:|------:|
+| SP      | $\pi_{sp,y}$ |$\pi_{sp,n}$|$\pi_{sp}$|
+| Gen      | $\pi_{g,y}$ |$\pi_{sp,n}$|$\pi_{g}$|
+
+\vfill
+
+We may be interested in comparing the proportion of respondents that rated ice cream as delicious given the ice cream shop that made it. Note these are conditional probabilities: $\pi_{y|sp} = \frac{\pi_{sp,y}}{\pi_{sp}}$.
+
+\vfill
+
+Here we can directly compare $\pi_{y|sp}$ and $\pi_{y|g}$. Recall for binomial data ($Y \sim Binomial(n,p)$) that:
+
+- E[Y] 
+
+\vfill
+
+- Var[Y] 
+
+\vfill
+
+We can use the MLE estimates of $\pi_{y|sp}$, $\pi_{y|g}$, and $\pi_{y|sp} - \pi_{y|g}$
+
+- MLE of $\pi_{y|sp}$: $p_{y|sp}$
+
+\vfill
+
+- MLE of $\pi_{y|g}$: $p_{y|g}$
+
+\vfill
+
+- MLE of $\pi_{y|sp} - \pi_{y|g}$:$
+
+\vfill
+
+We can use a large sample approximation to construct a confidence interval.
+
+- The SE for $p_{y|sp} - p_{y|g}$ is $\sqrt{\frac{p_{y|sp}(1-p_{y|sp})}{n_{sp}} + \frac{p_{y|g}(1-p_{y|g})}{n_g}}$
+
+\vfill
+
+$p_{y|sp} - p_{y|g} \pm z_{\alpha/2}(SE)$
+
+\newpage
+
+Example: Construct an uncertainty interval for the difference in proportions when,
+
+- $n_{sp,y} =80$
+
+\vfill
+
+- $n_{g,y}= 65$
+
+\vfill
+
+- $n_{sp}= n_g =100$
+
+\vfill
+
+\vfill
+
+\newpage
+
+Sometimes we are interested in other comparisons of binary proportions, consider the ratio of the success probabilities $\frac{\pi_{sp}}{\pi_g}$.
+
+\vfill
+
+- The ratio of probabilities is referred to as relative risk and is fairly common in medical settings. Consider the two sets of probabilities: 0.410 and 0.401 versus 0.010 and 0.001. Calculate the difference and relative risk
+
+\vfill
+
+- difference: 
+
+\vfill
+
+- relative risk: 
+
+\vfill
+
+- Is it a good thing or bad thing that differences and relative risks can have such contrasting implications?
+
+\vfill
+
+\newpage
+
+Another comparison, which we will see in much more detail later involves odds.
+
+- odds = $\pi / (1 - \pi)$,
+
+\vfill
+
+so consider the following probabilities and odds:
+
+- $\pi = .5$, odds = 
+- $\pi = \frac{2}{3}$, odds = 
+- $\pi = .75$, odds = 
+- $\pi = .8$, odds = 
+
+\vfill
+
+- While odds are useful for looking at a single event, we are often interested in comparing two binary events. In addition to differences and relative risk, we can also consider the odds ratio.
+
+\vfill
+
+- The odds ratio is defined as $\frac{odds_1}{odds_2} = \frac{\pi_1(1 - \pi_1)}{\pi_2(1-\pi_2)}$
+
+\vfill
+
+- We will return to odds ratios in the context of logistic regression in coming weeks.
+
+\vfill
+
+\newpage
+
+### $\chi^2$ test for independence
+
+
+
+Recall the table created in the video lectures
+
+```{r}
+#| echo: false
+set.seed(09042025)
+pi_vals <- c(.4, .2, .2, .2)
+n_values <- rmultinom(1, 200, pi_vals)
+
+output_table <- tibble(group= c('SP', 'Gen', ''),
+                       NO = c(n_values[c(1,3)], sum(n_values[c(1,3)])),
+                       EB = c(n_values[c(2,4)], sum(n_values[c(2,4)])),
+                       marg = c(sum(n_values[1:2]), sum(n_values[3:4]), sum(n_values)))
+
+output_table |> kable(col.names = c('', 'NO', 'EB', ''))
+```
+
+Our question was whether circadian rhythm and ice cream preference were independent.
+
+\vfill
+
+Generically we can write this table as 
+
+|    |   1| 2 |    |
+|:---|---:|--:|---:|
+|1   |  $\pi_{11}$|$\pi_{12}$| $\pi_{1+}$|
+|2   |  $\pi_{21}$|$\pi_{22}$| $\pi_{2+}$|
+|    |$\pi_{+1}$| $\pi_{+2}$| |
+
+where the $\pi$ values that include a `+` are marginal values.
+
+\vfill
+
+- Then independence can be stated as
+$H_0: \pi_{ij} = \pi_{i+}\pi_{+j}\; \forall i,j.$ Describe this in words, 
+
+\newpage
+
+\vfill
+
+To test this hypothesis (of independence), we can use the Pearson $\chi^2$ statistic, 
+$$\chi^2_{df} = \sum \frac{(n_{ij} - \mu_{ij})^2}{\mu_{ij}}$$
+where the degrees of freedom is (I -1) $\times$ (J-1).
+
+\vfill
+
+The $\mu_{ij}$ values can be calculated as $n * \pi_{i+} * \pi_{+j}$.
+
+\vfill
+
+```{r}
+#| echo: false
+n <- 200
+marg_iplus <- c(sum(n_values[1:2]), sum(n_values[3:4])) / n
+marg_plusi <- c(sum(n_values[c(1,3)]),sum(n_values[c(2,4)])) / n
+
+mu_table <- tibble(group= c('SP', 'Gen'),
+                       NO = c(marg_iplus[1] * marg_plusi[1] * n,
+                              marg_iplus[2] * marg_plusi[1] * n),
+                       EB = c(marg_iplus[1] * marg_plusi[2] * n,
+                              marg_iplus[2] * marg_plusi[2] * n))
+mu_table |> kable(col.names = c('', 'NO', 'EB'))
+```
+
+for comparison, the observed data counts were
+
+```{r}
+#| echo: false
+output_table[1:2,1:3] |> kable(col.names = c('', 'NO', 'EB'))
+
+```
+
+\vfill
+
+```{r}
+#| echo: false
+chi <- sum((as.numeric(unlist(output_table[1:2,2:3])) - as.numeric(unlist(mu_table[1:2,2:3])))^2 / as.numeric(unlist(mu_table[1:2,2:3])))
+```
+
+ \vfill
+ 
+\newpage
+
+Recall, we know the true values
+
+|    |   1| 2 |    |
+|:---|---:|--:|---:|
+|1   |  .4|.2| .6|
+|2   |  .2|.2| .4|
+|    |.6| .4| |
+
+and $\pi_{11} = .4 \neq .36 = \pi_{1+} \pi_{+1}$
+
+\vfill
+
+Finally, let's think about this problem in the context of estimation. We can directly estimate the probabilities (joint, marginal, or conditional) associated with this data.
+
+Assuming we use a uniform Dirichlet prior, estimate posterior means and intervals for the four joint probabilities.
+
