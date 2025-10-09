@@ -1,0 +1,108 @@
+---
+title: "Week Nine"
+format: pdf
+editor: source
+editor_options: 
+  chunk_output_type: console
+---
+
+## Last Week
+
+- Exams
+
+
+## This Week: Generalized Linear Models for Count Data
+
+
+Today:
+
+- Exam Recap:
+
+- Activity:
+
+    - GLMs for count data
+
+- Thursday: Lab 
+
+    - Separation
+
+## Next Week: Count Regression / Ordinal Regression
+
+
+
+
+------------------------------------------------------------------------
+```{r}
+#| include: false
+library(tidyverse)
+library(knitr)
+library(arm)
+library(rstanarm)
+library(readr)
+set.seed(09262025)
+```
+
+\newpage
+
+### Probability Distributions for Count Data
+
+Poisson Distribution:
+
+$$Pr[X = k] = \frac{\lambda^k \exp(-\lambda)}{k!}$$
+
+- Expectation 
+
+- Variance 
+
+Use `rpois()` to generate and visualize data with different $\lambda$ parameters.
+
+- $\lambda = [1, 5, 10, 20]$
+
+
+\newpage
+
+Negative Binomial Distribution:
+
+$$Pr[X = k] = \frac{\Gamma(k + n)}{\Gamma(n)k!}p^n(1-p)k$$
+
+- Expectation 
+
+- Variance 
+
+Alternatively, we can define
+
+- the mean, 
+
+- the size (dispersion parameter), as 
+
+
+Use `rnbinom()` with `mu` and `size` to simulate data with some different combinations of the parameters.
+
+- $\mu = [1, 5, 10, 20]$
+
+- size = [.75, 1, 10]
+
+Then plot figures and confirm that the mean and variance of the data match your expectations.
+
+
+\newpage
+
+### Count Regression
+
+Recall that a GLM has three parts: random component, systematic component, and link function.
+
+So with Poisson regression, it looks like this
+
+\vfill
+
+\vfill
+
+Let's generate data with one continuous predictor
+
+
+
+Fit a generalized linear model to your data.
+
+
+Add the regression fit line to your figure
+
