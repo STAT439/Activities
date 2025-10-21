@@ -19,7 +19,7 @@ Today:
 
   - Model exploration for count data
 
-- Thursday: Lab (Bicycle Rentals)
+- Thursday: Lab
 
 ## Next Week: Multicategory Regression
 
@@ -65,13 +65,13 @@ midterm_data <- tibble(y = y, x1, x2, x3, x4)
 
 #### 4. (4 points) Create a set of EDA figures to explore the relationship between the response (success out of 1 trial) and the potential covariates.
 
-![](Week10_files/figure-commonmark/unnamed-chunk-3-1.png)
+![](Week10_key_files/figure-commonmark/unnamed-chunk-3-1.png)
 
-![](Week10_files/figure-commonmark/unnamed-chunk-4-1.png)
+![](Week10_key_files/figure-commonmark/unnamed-chunk-4-1.png)
 
-![](Week10_files/figure-commonmark/unnamed-chunk-5-1.png)
+![](Week10_key_files/figure-commonmark/unnamed-chunk-5-1.png)
 
-![](Week10_files/figure-commonmark/unnamed-chunk-6-1.png)
+![](Week10_key_files/figure-commonmark/unnamed-chunk-6-1.png)
 
 #### 5. (4 points) Summarize your findings in the figures
 
@@ -144,7 +144,7 @@ midterm_data |>
   geom_line(data = fit_data, color = 'black')
 ```
 
-![](Week10_files/figure-commonmark/unnamed-chunk-8-1.png)
+![](Week10_key_files/figure-commonmark/unnamed-chunk-8-1.png)
 
 ``` r
 tibble(x1 = midterm_data$x1, 
@@ -158,7 +158,7 @@ tibble(x1 = midterm_data$x1,
   geom_hline(yintercept = 0)
 ```
 
-![](Week10_files/figure-commonmark/unnamed-chunk-8-2.png)
+![](Week10_key_files/figure-commonmark/unnamed-chunk-8-2.png)
 
 ##### X2
 
@@ -177,7 +177,7 @@ midterm_data |>
   geom_line(data = fit_data, color = 'black')
 ```
 
-![](Week10_files/figure-commonmark/unnamed-chunk-9-1.png)
+![](Week10_key_files/figure-commonmark/unnamed-chunk-9-1.png)
 
 ``` r
 tibble(x2 = midterm_data$x2, 
@@ -191,7 +191,7 @@ tibble(x2 = midterm_data$x2,
   geom_hline(yintercept = 0)
 ```
 
-![](Week10_files/figure-commonmark/unnamed-chunk-9-2.png)
+![](Week10_key_files/figure-commonmark/unnamed-chunk-9-2.png)
 
 ##### X3
 
@@ -210,7 +210,7 @@ midterm_data |>
   geom_line(data = fit_data, color = 'black')
 ```
 
-![](Week10_files/figure-commonmark/unnamed-chunk-10-1.png)
+![](Week10_key_files/figure-commonmark/unnamed-chunk-10-1.png)
 
 ``` r
 tibble(x3 = midterm_data$x3, 
@@ -224,7 +224,7 @@ tibble(x3 = midterm_data$x3,
   geom_hline(yintercept = 0)
 ```
 
-![](Week10_files/figure-commonmark/unnamed-chunk-10-2.png)
+![](Week10_key_files/figure-commonmark/unnamed-chunk-10-2.png)
 
 ##### Model v2.0 add X1 & X4 interaction and drop X3
 
@@ -276,7 +276,7 @@ midterm_data |>
   geom_line(data = fit_data, linetype = 2)
 ```
 
-![](Week10_files/figure-commonmark/unnamed-chunk-12-1.png)
+![](Week10_key_files/figure-commonmark/unnamed-chunk-12-1.png)
 
 ``` r
 tibble(x1 = midterm_data$x1, 
@@ -290,7 +290,7 @@ tibble(x1 = midterm_data$x1,
   geom_hline(yintercept = 0)
 ```
 
-![](Week10_files/figure-commonmark/unnamed-chunk-12-2.png)
+![](Week10_key_files/figure-commonmark/unnamed-chunk-12-2.png)
 
 ##### X2
 
@@ -309,7 +309,7 @@ midterm_data |>
   geom_line(data = fit_data, color = 'black')
 ```
 
-![](Week10_files/figure-commonmark/unnamed-chunk-13-1.png)
+![](Week10_key_files/figure-commonmark/unnamed-chunk-13-1.png)
 
 ``` r
 tibble(x2 = midterm_data$x2, 
@@ -323,7 +323,7 @@ tibble(x2 = midterm_data$x2,
   geom_hline(yintercept = 0)
 ```
 
-![](Week10_files/figure-commonmark/unnamed-chunk-13-2.png)
+![](Week10_key_files/figure-commonmark/unnamed-chunk-13-2.png)
 
 ##### Model v3.0 add square of x2 and drop x4
 
@@ -375,7 +375,7 @@ midterm_data |>
   geom_line(data = fit_data, linetype = 2)
 ```
 
-![](Week10_files/figure-commonmark/unnamed-chunk-15-1.png)
+![](Week10_key_files/figure-commonmark/unnamed-chunk-15-1.png)
 
 ``` r
 tibble(x1 = midterm_data$x1, 
@@ -389,7 +389,7 @@ tibble(x1 = midterm_data$x1,
   geom_hline(yintercept = 0)
 ```
 
-![](Week10_files/figure-commonmark/unnamed-chunk-15-2.png)
+![](Week10_key_files/figure-commonmark/unnamed-chunk-15-2.png)
 
 ##### X2
 
@@ -409,7 +409,7 @@ midterm_data |>
   geom_line(data = fit_data, color = 'black')
 ```
 
-![](Week10_files/figure-commonmark/unnamed-chunk-16-1.png)
+![](Week10_key_files/figure-commonmark/unnamed-chunk-16-1.png)
 
 ``` r
 tibble(x2 = midterm_data$x2, 
@@ -423,7 +423,7 @@ tibble(x2 = midterm_data$x2,
   geom_hline(yintercept = 0)
 ```
 
-![](Week10_files/figure-commonmark/unnamed-chunk-16-2.png)
+![](Week10_key_files/figure-commonmark/unnamed-chunk-16-2.png)
 
 ##### Model v4.0 add cubic term for x2
 
@@ -487,7 +487,7 @@ midterm_data |>
             aes(y = true_prop, x = x1, color = x4)) 
 ```
 
-![](Week10_files/figure-commonmark/unnamed-chunk-18-1.png)
+![](Week10_key_files/figure-commonmark/unnamed-chunk-18-1.png)
 
 ``` r
 tibble(x1 = midterm_data$x1, 
@@ -501,7 +501,7 @@ tibble(x1 = midterm_data$x1,
   geom_hline(yintercept = 0)
 ```
 
-![](Week10_files/figure-commonmark/unnamed-chunk-18-2.png)
+![](Week10_key_files/figure-commonmark/unnamed-chunk-18-2.png)
 
 ##### X2
 
@@ -523,7 +523,7 @@ midterm_data |>
   geom_line(data = fit_data, color = 'black')
 ```
 
-![](Week10_files/figure-commonmark/unnamed-chunk-19-1.png)
+![](Week10_key_files/figure-commonmark/unnamed-chunk-19-1.png)
 
 ``` r
 tibble(x2 = midterm_data$x2, 
@@ -537,7 +537,7 @@ tibble(x2 = midterm_data$x2,
   geom_hline(yintercept = 0)
 ```
 
-![](Week10_files/figure-commonmark/unnamed-chunk-19-2.png)
+![](Week10_key_files/figure-commonmark/unnamed-chunk-19-2.png)
 
 Notes and thoughts:
 
@@ -564,7 +564,7 @@ model <- lm(y ~ x * z, data = data)
 interact_plot(model, pred = x, modx = z, plot.points = TRUE)
 ```
 
-![](Week10_files/figure-commonmark/unnamed-chunk-20-1.png)
+![](Week10_key_files/figure-commonmark/unnamed-chunk-20-1.png)
 
 3.  3-way interactions and higher
 
@@ -580,12 +580,12 @@ component, and link function.
 So with Poisson regression, it looks like this
 
 $$y  \sim Poisson(\mu)$$ $$\mu  = \exp(\beta_0 + \beta_1 x + ...)$$
-$$\log(\mu) = \beta_0 + \beta_1 x + ...$$
+$$\log(\mu)  = \beta_0 + \beta_1 x + ...$$
 
 or with negative binomial
 
 $$y  \sim NB(\mu, size)$$ $$\mu  = \exp(\beta_0 + \beta_1 x + ...)$$
-$$\log(\mu)  = \beta_0 + \beta_1 x + ...$$
+$$\log(\mu) = \beta_0 + \beta_1 x + ...$$
 
 - For $\beta_0$, $\exp(\beta_0)$ is the expected count when all other
   x-values are zero. Note, this intepretation differs somewhat with
@@ -604,14 +604,245 @@ $$\log(\mu)  = \beta_0 + \beta_1 x + ...$$
 1.  Simulate Poisson data from a model where x is in the range of -2 to
     2, $\beta_0 = \log(100)$, $\beta_1 = \log(1.5)$.
 
+``` r
+n <- 1000
+x <- runif(n, -2, 2)
+beta0 <- log(100)
+beta1 <- log(1.5)
+mu <- exp(beta0 + beta1 * x)
+y <- rpois(n, mu)
+
+pois_tibble <- tibble(y = y, x = x, mu = mu) |>
+  mutate(log_mu = log(mu))
+```
+
 2.  Plot your data (Y ~ X) also plot ($\log(y)$ ~ x)
+
+``` r
+pois_tibble |>
+  mutate(log_y = log(y)) |>
+  ggplot(aes(y = log_y, x = x)) +
+  geom_point() +
+  geom_smooth() +
+  theme_bw()
+```
+
+    `geom_smooth()` using method = 'gam' and formula = 'y ~ s(x, bs = "cs")'
+
+![](Week10_key_files/figure-commonmark/unnamed-chunk-22-1.png)
+
+``` r
+pois_tibble |>
+  ggplot(aes(y = y, x = x)) +
+  geom_point() +
+  geom_smooth() +
+  theme_bw()
+```
+
+    `geom_smooth()` using method = 'gam' and formula = 'y ~ s(x, bs = "cs")'
+
+![](Week10_key_files/figure-commonmark/unnamed-chunk-22-2.png)
 
 3.  Fit a Poisson regression model.
 
-    - Look at residuals, Intepret coefficients, plot model fit +
-      uncertainty
+``` r
+pois_model <- stan_glm(y ~ x, data = pois_tibble, family = poisson, refresh = 0) 
+
+pois_model |> print(digits = 3)
+```
+
+    stan_glm
+     family:       poisson [log]
+     formula:      y ~ x
+     observations: 1000
+     predictors:   2
+    ------
+                Median MAD_SD
+    (Intercept) 4.604  0.003 
+    x           0.407  0.003 
+
+    ------
+    * For help interpreting the printed output see ?print.stanreg
+    * For info on the priors used see ?prior_summary.stanreg
+
+``` r
+loo(pois_model)
+```
+
+
+    Computed from 4000 by 1000 log-likelihood matrix.
+
+             Estimate   SE
+    elpd_loo  -3708.2 22.3
+    p_loo         2.0  0.1
+    looic      7416.4 44.7
+    ------
+    MCSE of elpd_loo is 0.0.
+    MCSE and ESS estimates assume MCMC draws (r_eff in [0.3, 0.7]).
+
+    All Pareto k estimates are good (k < 0.7).
+    See help('pareto-k-diagnostic') for details.
+
+``` r
+pois_tibble |>
+  mutate(resid = residuals(pois_model)) |>
+  ggplot(aes(y = resid, x = x)) +
+  geom_point() +
+  geom_smooth() +
+  theme_bw()
+```
+
+    `geom_smooth()` using method = 'gam' and formula = 'y ~ s(x, bs = "cs")'
+
+![](Week10_key_files/figure-commonmark/unnamed-chunk-23-1.png)
+
+``` r
+pois_tibble |> 
+  bind_cols(predictive_interval(pois_model)) |> 
+  bind_cols(pred = exp(predict(pois_model))) |>
+  ggplot(aes(x, y)) +
+  geom_point() +
+  geom_line(aes(y = pred), color = 'blue', linewidth = 2) +
+  geom_ribbon(aes(ymin = `5%`, ymax = `95%`), alpha = 0.2)  +
+  theme_bw()
+```
+
+![](Week10_key_files/figure-commonmark/unnamed-chunk-23-2.png)
+
+``` r
+pois_model_ml <- glm(y ~ x, data = pois_tibble, family = poisson) 
+
+pois_model_ml |> summary()
+```
+
+
+    Call:
+    glm(formula = y ~ x, family = poisson, data = pois_tibble)
+
+    Coefficients:
+                Estimate Std. Error z value Pr(>|z|)    
+    (Intercept) 4.603821   0.003301  1394.6   <2e-16 ***
+    x           0.407118   0.002821   144.3   <2e-16 ***
+    ---
+    Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+    (Dispersion parameter for poisson family taken to be 1)
+
+        Null deviance: 23118.14  on 999  degrees of freedom
+    Residual deviance:   991.23  on 998  degrees of freedom
+    AIC: 7416.3
+
+    Number of Fisher Scoring iterations: 4
+
+    - Look at residuals, Intepret coefficients, plot model fit + uncertainty
 
 4.  Fit a Negative binomial regression model
 
-    - Look at residuals, Intepret coefficients, plot model fit +
-      uncertainty
+``` r
+nb_model <- stan_glm(y ~ x, data = pois_tibble, family = neg_binomial_2, refresh = 0) 
+
+nb_model |> print(digits = 3)
+```
+
+    stan_glm
+     family:       neg_binomial_2 [log]
+     formula:      y ~ x
+     observations: 1000
+     predictors:   2
+    ------
+                Median MAD_SD
+    (Intercept) 4.604  0.004 
+    x           0.406  0.004 
+
+    Auxiliary parameter(s):
+                          Median  MAD_SD 
+    reciprocal_dispersion 115.445   7.615
+
+    ------
+    * For help interpreting the printed output see ?print.stanreg
+    * For info on the priors used see ?prior_summary.stanreg
+
+``` r
+loo(nb_model)
+```
+
+
+    Computed from 4000 by 1000 log-likelihood matrix.
+
+             Estimate   SE
+    elpd_loo  -3806.5 14.8
+    p_loo         1.2  0.1
+    looic      7612.9 29.6
+    ------
+    MCSE of elpd_loo is 0.0.
+    MCSE and ESS estimates assume MCMC draws (r_eff in [0.4, 1.1]).
+
+    All Pareto k estimates are good (k < 0.7).
+    See help('pareto-k-diagnostic') for details.
+
+``` r
+pois_tibble |>
+  mutate(resid = residuals(nb_model)) |>
+  ggplot(aes(y = resid, x = x)) +
+  geom_point() +
+  geom_smooth() +
+  theme_bw()
+```
+
+    `geom_smooth()` using method = 'gam' and formula = 'y ~ s(x, bs = "cs")'
+
+![](Week10_key_files/figure-commonmark/unnamed-chunk-25-1.png)
+
+``` r
+pois_tibble |> 
+  bind_cols(predictive_interval(nb_model)) |> 
+  bind_cols(pred = exp(predict(nb_model))) |>
+  ggplot(aes(x, y)) +
+  geom_point() +
+  geom_line(aes(y = pred), color = 'blue', linewidth = 2) +
+  geom_ribbon(aes(ymin = `5%`, ymax = `95%`), alpha = 0.2)  +
+  theme_bw()
+```
+
+![](Week10_key_files/figure-commonmark/unnamed-chunk-25-2.png)
+
+``` r
+nb_model_ml <- glm.nb(y ~ x, data = pois_tibble) 
+```
+
+    Warning in theta.ml(Y, mu, sum(w), w, limit = control$maxit, trace =
+    control$trace > : iteration limit reached
+    Warning in theta.ml(Y, mu, sum(w), w, limit = control$maxit, trace =
+    control$trace > : iteration limit reached
+
+``` r
+nb_model_ml |> summary()
+```
+
+
+    Call:
+    glm.nb(formula = y ~ x, data = pois_tibble, init.theta = 820596.2365, 
+        link = log)
+
+    Coefficients:
+                Estimate Std. Error z value Pr(>|z|)    
+    (Intercept) 4.603821   0.003301  1394.6   <2e-16 ***
+    x           0.407118   0.002821   144.3   <2e-16 ***
+    ---
+    Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+    (Dispersion parameter for Negative Binomial(820596.2) family taken to be 1)
+
+        Null deviance: 23115.00  on 999  degrees of freedom
+    Residual deviance:   991.11  on 998  degrees of freedom
+    AIC: 7418.3
+
+    Number of Fisher Scoring iterations: 1
+
+                  Theta:  820596 
+              Std. Err.:  5094947 
+    Warning while fitting theta: iteration limit reached 
+
+     2 x log-likelihood:  -7412.305 
+
+     - Look at residuals, Intepret coefficients, plot model fit + uncertainty

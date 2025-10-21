@@ -491,13 +491,13 @@ $$\log(\mu)  = \beta_0 + \beta_1 x + ...$$
     
     -Note that $\mu = \exp(\beta_0) \times \exp(\beta_1 x)$ and $\exp(\beta_1 x+1) = \exp(\beta_1 x) \times \exp(\beta_1)$, so for two sampling units, where x_1$ differs by one unit would, we'd expect $\mu$ to differ multiplicatively by a factor of $\exp(\beta_1)$.
 
-1. Simulate Poisson data from a model where x is in the range of -2 to 2, $\beta_0 = \log(100)$, $\beta_0 = \log(1.5)$.
+1. Simulate Poisson data from a model where x is in the range of -2 to 2, $\beta_0 = \log(100)$, $\beta_1 = \log(1.5)$.
 
-- Plot your data (Y ~ X) also plot ($\log(\mu)$ ~ x)
+2. Plot your data (Y ~ X) also plot ($\log(y)$ ~ x)
 
-- Fit a Poisson regression model.
+3. Fit a Poisson regression model.
     - Look at residuals, Intepret coefficients, plot model fit + uncertainty
     
-- Fit a Negative binomial regression model
+4. Fit a Negative binomial regression model
      - Look at residuals, Intepret coefficients, plot model fit + uncertainty
 
