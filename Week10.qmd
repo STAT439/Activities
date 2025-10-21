@@ -473,19 +473,15 @@ Recall that a GLM has three parts: random component, systematic component, and l
 
 So with Poisson regression, it looks like this
 
-\begin{align*}
-y & \sim Poisson(\mu) \\
-\mu & = \exp(\beta_0 + \beta_1 x + ...)\\
-\log(\mu) & = \beta_0 + \beta_1 x + ...\\
-\end{align*}
+$$y  \sim Poisson(\mu)$$ 
+$$\mu  = \exp(\beta_0 + \beta_1 x + ...)$$
+$$\log(\mu) = \beta_0 + \beta_1 x + ...$$
 
 or with negative binomial
 
-\begin{align*}
-y & \sim NB(\mu, size) \\
-\mu & = \exp(\beta_0 + \beta_1 x + ...)\\
-\log(\mu) & = \beta_0 + \beta_1 x + ...\\
-\end{align*}
+$$y  \sim NB(\mu, size)$$
+$$\mu  = \exp(\beta_0 + \beta_1 x + ...)$$
+$$\log(\mu)  = \beta_0 + \beta_1 x + ...$$
 
 - For $\beta_0$, $\exp(\beta_0)$ is the expected count when all other x-values are zero. Note, this intepretation differs somewhat with categorical predictors - especially multiple.
 

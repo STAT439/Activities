@@ -1,5 +1,6 @@
 # Week Ten
 
+
 ## Last Week
 
 - Probability Distributions for Count Data
@@ -578,7 +579,13 @@ component, and link function.
 
 So with Poisson regression, it looks like this
 
+$$y  \sim Poisson(\mu)$$ $$\mu  = \exp(\beta_0 + \beta_1 x + ...)$$
+$$\log(\mu) = \beta_0 + \beta_1 x + ...$$
+
 or with negative binomial
+
+$$y  \sim NB(\mu, size)$$ $$\mu  = \exp(\beta_0 + \beta_1 x + ...)$$
+$$\log(\mu)  = \beta_0 + \beta_1 x + ...$$
 
 - For $\beta_0$, $\exp(\beta_0)$ is the expected count when all other
   x-values are zero. Note, this intepretation differs somewhat with
