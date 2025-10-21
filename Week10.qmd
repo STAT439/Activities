@@ -1,0 +1,507 @@
+---
+title: "Week Ten"
+format: gfm
+editor: source
+editor_options: 
+  chunk_output_type: console
+---
+
+## Last Week
+
+- Probability Distributions for Count Data
+
+- Count Regression
+
+- Exams (Last - Last Week)
+
+
+## This Week: Generalized Linear Models for Count Data
+
+
+Today:
+
+- Take Home Exam Recap
+
+- Activity:
+
+    - Model exploration for count data
+
+- Thursday: Lab (Bicycle Rentals)
+
+
+## Next Week:  Multicategory Regression
+
+
+
+
+------------------------------------------------------------------------
+```{r}
+#| include: false
+library(tidyverse)
+library(knitr)
+library(arm)
+library(rstanarm)
+library(readr)
+set.seed(09262025)
+```
+
+\newpage
+
+### Part II of Exam
+
+The second part of the exam will involve model fitting with logistic regression. Use the `midterm_data` and note that y is a single binary variable.
+
+
+```{r}
+set.seed(10062025)
+n <- 1000
+x1 <- seq(-3, 3, length.out = n)
+x2 <- rnorm(n, sd = 2)
+x3 <- rnorm(n)
+x4 <- sample(c('A','B','C'), size = n, replace = T)
+
+dat_tibble <- tibble(x1, x2, x3, x4)
+X_mat <- model.matrix(~ x1 + x2 + I(x2^2) + I(x2 ^3) + x3 + x4 + x1:x4)
+
+beta0 <- 0
+beta1 <- -1
+beta2 <- 1
+beta2_sq <- .6
+beta2_cube <- -.3
+beta3 <- 0
+beta4b <- 0
+beta4c <- 0
+beta1_4b <- 2
+beta1_4c <- 0
+
+beta_vec <- c(beta0, beta1, beta2, beta2_sq, beta2_cube, beta3, beta4b, beta4c, beta1_4b, beta1_4c)
+
+pi <- invlogit(X_mat %*% beta_vec)
+
+y <- rbinom(n, 1, pi)
+midterm_data <- tibble(y = y, x1, x2, x3, x4)
+```
+
+#### 4. (4 points) Create a set of EDA figures to explore the relationship between the response (success out of 1 trial) and the potential covariates.
+
+```{r}
+#| echo: false
+midterm_data |>
+  mutate(prop = y )|>
+  ggplot(aes(y = prop, x = x1, color = x4)) +
+  geom_smooth(method = 'loess', formula = 'y ~ x') +
+  geom_jitter(alpha = .5, height = .03, width = .03) +
+  theme_bw()
+```
+
+```{r}
+#| echo: false
+midterm_data |>
+  mutate(prop = y )|>
+  ggplot(aes(y = prop, x = x2, color = x4)) +
+  geom_smooth(method = 'loess', formula = 'y ~ x') +
+  geom_jitter(alpha = .5, height = .03, width = .03) +
+  theme_bw()
+```
+
+```{r}
+#| echo: false
+midterm_data |>
+  mutate(prop = y )|>
+  ggplot(aes(y = prop, x = x3, color = x4)) +
+  geom_smooth(method = 'loess', formula = 'y ~ x') +
+  geom_jitter(alpha = .5, height = .03, width = .03) +
+  theme_bw()
+```
+
+```{r}
+#| echo: false
+midterm_data |>
+  mutate(prop = y )|>
+  ggplot(aes(y = prop, x = x4, color = x4)) +
+  geom_violin() +
+  geom_boxplot(width = .1) +
+  geom_jitter(alpha = .75, height = .03, width = .3) +
+  theme_bw() +
+  theme(legend.position = 'none')
+```
+
+
+#### 5. (4 points) Summarize your findings in the figures
+Which variables and combinations of variables to you think are important?
+
+
+- $x_1$ tends to have a decreasing relationship with the success probability; however, the relationship is increasing for group B in $x_4$
+
+- $x_2$ appears to have a non-linear relationship with the success probability but is relatively consistent across groups of $x_4$
+
+- $x_3$ might have a weak relationship with success probability - potentially quadratic although there is a lot of uncertainty in model fits in the tails of $x_3$.
+
+- $x_4$ doesn't seem to be particularly meaningful alone
+
+#### 6. (4 points) Using residual diagnostics and AIC fit a series of models. 
+
+You don't need to print out all of these results, but include a written summary of models you explored. You are welcome to use bullet points for this section.
+
+##### Start Model
+
+```{r}
+start_model <- glm(y ~ x1 + x2 + x3 + x4, data = midterm_data, family = binomial)
+summary(start_model)
+```
+
+
+##### X1
+
+```{r}
+fit_data <- tibble(x1 = midterm_data$x1, 
+                   y = midterm_data$y, 
+                   x4 = midterm_data$x4,
+                   prop = invlogit(coef(start_model)[[1]] + coef(start_model)[[2]] * x1))
+
+midterm_data |>
+  mutate(prop = y )|>
+  ggplot(aes(y = prop, x = x1, color = x4)) +
+  geom_smooth(method = 'loess', formula = 'y ~ x') +
+  geom_jitter(alpha = .5, height = .03, width = .03) +
+  theme_bw() +
+  geom_line(data = fit_data, color = 'black')
+
+tibble(x1 = midterm_data$x1, 
+       resid =rstandard(start_model),
+       x4 = midterm_data$x4) |>
+  ggplot(aes(y = resid, x = x1, color = x4)) +
+  geom_jitter(alpha = .5) +
+  geom_smooth(method = 'loess', formula = 'y ~ x') +
+  geom_smooth(method = 'loess', formula = 'y ~ x', inherit.aes = F, aes(y=resid, x = x1), linetype = 2) + 
+  theme_bw() +
+  geom_hline(yintercept = 0)
+```
+
+##### X2
+
+```{r}
+fit_data <- tibble(x2 = midterm_data$x2, 
+                   y = midterm_data$y, 
+                   x4 = midterm_data$x4,
+                   prop = invlogit(coef(start_model)[[1]] + coef(start_model)[[3]] * x2))
+
+midterm_data |>
+  mutate(prop = y )|>
+  ggplot(aes(y = prop, x = x2, color = x4)) +
+  geom_smooth(method = 'loess', formula = 'y ~ x') +
+  geom_jitter(alpha = .5, height = .03, width = .03) +
+  theme_bw() +
+  geom_line(data = fit_data, color = 'black')
+
+tibble(x2 = midterm_data$x2, 
+       resid =rstandard(start_model),
+       x4 = midterm_data$x4) |>
+  ggplot(aes(y = resid, x = x2, color = x4)) +
+  geom_jitter(alpha = .5) +
+  geom_smooth(method = 'loess', formula = 'y ~ x') +
+  geom_smooth(method = 'loess', formula = 'y ~ x', inherit.aes = F, aes(y=resid, x = x2), linetype = 2) + 
+  theme_bw() +
+  geom_hline(yintercept = 0)
+```
+
+##### X3
+
+```{r}
+fit_data <- tibble(x3 = midterm_data$x2, 
+                   y = midterm_data$y, 
+                   x4 = midterm_data$x4,
+                   prop = invlogit(coef(start_model)[[1]] + coef(start_model)[[3]] * x3))
+
+midterm_data |>
+  mutate(prop = y )|>
+  ggplot(aes(y = prop, x = x3, color = x4)) +
+  geom_smooth(method = 'loess', formula = 'y ~ x') +
+  geom_jitter(alpha = .5, height = .03, width = .03) +
+  theme_bw() +
+  geom_line(data = fit_data, color = 'black')
+
+tibble(x3 = midterm_data$x3, 
+       resid =rstandard(start_model),
+       x4 = midterm_data$x4) |>
+  ggplot(aes(y = resid, x = x3, color = x4)) +
+  geom_jitter(alpha = .5) +
+  geom_smooth(method = 'loess', formula = 'y ~ x') +
+  geom_smooth(method = 'loess', formula = 'y ~ x', inherit.aes = F, aes(y=resid, x = x3), linetype = 2) + 
+  theme_bw() +
+  geom_hline(yintercept = 0)
+```
+
+##### Model v2.0 add X1 & X4 interaction and drop X3
+
+```{r}
+modelv2 <- glm(y ~ x1 + x2 + x4 + x1:x4, data = midterm_data, family = binomial)
+summary(modelv2)
+```
+
+
+##### X1
+
+```{r}
+prop_all <- invlogit(model.matrix(y ~ x1 + x1:x4 ) %*% coef(modelv2)[c(1,2,6,7)])
+
+fit_data <- tibble(x1 = midterm_data$x1, 
+                   y = midterm_data$y, 
+                   x4 = midterm_data$x4,
+                   prop = prop_all)
+
+midterm_data |>
+  mutate(prop = y )|>
+  ggplot(aes(y = prop, x = x1, color = x4)) +
+  geom_smooth(method = 'loess', formula = 'y ~ x') +
+  geom_jitter(alpha = .5, height = .03, width = .03) +
+  theme_bw() +
+  geom_line(data = fit_data, linetype = 2)
+
+tibble(x1 = midterm_data$x1, 
+       resid =rstandard(modelv2),
+       x4 = midterm_data$x4) |>
+  ggplot(aes(y = resid, x = x1, color = x4)) +
+  geom_jitter(alpha = .5) +
+  geom_smooth(method = 'loess', formula = 'y ~ x') +
+  geom_smooth(method = 'loess', formula = 'y ~ x', inherit.aes = F, aes(y=resid, x = x1), linetype = 2) + 
+  theme_bw() +
+  geom_hline(yintercept = 0)
+```
+
+##### X2
+
+```{r}
+fit_data <- tibble(x2 = midterm_data$x2, 
+                   y = midterm_data$y, 
+                   x4 = midterm_data$x4,
+                   prop = invlogit(coef(modelv2)[[1]] + coef(start_model)[[3]] * x2))
+
+midterm_data |>
+  mutate(prop = y )|>
+  ggplot(aes(y = prop, x = x2, color = x4)) +
+  geom_smooth(method = 'loess', formula = 'y ~ x') +
+  geom_jitter(alpha = .5, height = .03, width = .03) +
+  theme_bw() +
+  geom_line(data = fit_data, color = 'black')
+
+tibble(x2 = midterm_data$x2, 
+       resid =rstandard(modelv2),
+       x4 = midterm_data$x4) |>
+  ggplot(aes(y = resid, x = x2, color = x4)) +
+  geom_jitter(alpha = .5) +
+  geom_smooth(method = 'loess', formula = 'y ~ x') +
+  geom_smooth(method = 'loess', formula = 'y ~ x', inherit.aes = F, aes(y=resid, x = x2), linetype = 2) + 
+  theme_bw() +
+  geom_hline(yintercept = 0)
+```
+
+
+##### Model v3.0 add square of x2 and drop x4
+
+```{r}
+modelv3 <- glm(y ~ x1 + x2 + I(x2^2) + x1:x4, data = midterm_data, family = binomial)
+summary(modelv3)
+```
+
+
+##### X1
+
+```{r}
+prop_all <- invlogit(model.matrix(y ~ x1 + x1:x4 ) %*% coef(modelv3)[c(1,2,5,6)])
+
+fit_data <- tibble(x1 = midterm_data$x1, 
+                   y = midterm_data$y, 
+                   x4 = midterm_data$x4,
+                   prop = prop_all)
+
+midterm_data |>
+  mutate(prop = y )|>
+  ggplot(aes(y = prop, x = x1, color = x4)) +
+  geom_smooth(method = 'loess', formula = 'y ~ x') +
+  geom_jitter(alpha = .5, height = .03, width = .03) +
+  theme_bw() +
+  geom_line(data = fit_data, linetype = 2)
+
+tibble(x1 = midterm_data$x1, 
+       resid =rstandard(modelv3),
+       x4 = midterm_data$x4) |>
+  ggplot(aes(y = resid, x = x1, color = x4)) +
+  geom_jitter(alpha = .5) +
+  geom_smooth(method = 'loess', formula = 'y ~ x') +
+  geom_smooth(method = 'loess', formula = 'y ~ x', inherit.aes = F, aes(y=resid, x = x1), linetype = 2) + 
+  theme_bw() +
+  geom_hline(yintercept = 0)
+```
+
+##### X2
+
+```{r}
+fit_data <- tibble(x2 = midterm_data$x2, 
+                   x2_sq <- midterm_data$x2 ^2,
+                   y = midterm_data$y, 
+                   x4 = midterm_data$x4,
+                   prop = invlogit(coef(modelv3)[[1]] + coef(modelv3)[[3]] * x2 + coef(modelv3)[[4]] * x2_sq))
+
+midterm_data |>
+  mutate(prop = y )|>
+  ggplot(aes(y = prop, x = x2, color = x4)) +
+  geom_smooth(method = 'loess', formula = 'y ~ x') +
+  geom_jitter(alpha = .5, height = .03, width = .03) +
+  theme_bw() +
+  geom_line(data = fit_data, color = 'black')
+
+tibble(x2 = midterm_data$x2, 
+       resid =rstandard(modelv3),
+       x4 = midterm_data$x4) |>
+  ggplot(aes(y = resid, x = x2, color = x4)) +
+  geom_jitter(alpha = .5) +
+  geom_smooth(method = 'loess', formula = 'y ~ x') +
+  geom_smooth(method = 'loess', formula = 'y ~ x', inherit.aes = F, aes(y=resid, x = x2), linetype = 2) + 
+  theme_bw() +
+  geom_hline(yintercept = 0)
+```
+
+##### Model v4.0 add cubic term for x2
+
+```{r}
+modelv4 <- glm(y ~ x1 + x2 + I(x2^2) + I(x2^3) +  x1:x4, data = midterm_data, family = binomial)
+summary(modelv4)
+```
+
+
+##### X1
+
+```{r}
+prop_all <- invlogit(model.matrix(y ~x1 +  x1:x4 , data = midterm_data) %*% coef(modelv4)[c(1,2,6,7)])
+
+true_prop <- invlogit(model.matrix(y ~x1 +  x1:x4 , data = midterm_data) %*% c(0, -1, 2, 0))
+
+
+fit_data <- tibble(x1 = midterm_data$x1, 
+                   y = midterm_data$y, 
+                   x4 = midterm_data$x4,
+                   prop = prop_all,
+                   true_prop = true_prop)
+
+midterm_data |>
+  mutate(prop = y )|>
+  ggplot(aes(y = prop, x = x1, color = x4)) +
+#  geom_smooth(method = 'loess', formula = 'y ~ x') +
+  geom_jitter(alpha = .5, height = .03, width = .03) +
+  theme_bw() +
+  geom_line(data = fit_data, linetype = 2) +
+  geom_line(data = fit_data, linetype = 3, linewidth = 2, inherit.aes = F,
+            aes(y = true_prop, x = x1, color = x4)) 
+
+tibble(x1 = midterm_data$x1, 
+       resid =rstandard(modelv4),
+       x4 = midterm_data$x4) |>
+  ggplot(aes(y = resid, x = x1, color = x4)) +
+  geom_jitter(alpha = .5) +
+  geom_smooth(method = 'loess', formula = 'y ~ x') +
+  geom_smooth(method = 'loess', formula = 'y ~ x', inherit.aes = F, aes(y=resid, x = x1), linetype = 2) + 
+  theme_bw() +
+  geom_hline(yintercept = 0)
+```
+
+##### X2
+
+```{r}
+fit_data <- tibble(x2 = midterm_data$x2, 
+                   x2_sq <- midterm_data$x2 ^2,
+                   x2_cube <- midterm_data$x2 ^3,
+                   y = midterm_data$y, 
+                   x4 = midterm_data$x4,
+                   prop = invlogit(coef(modelv4)[[1]] +
+coef(modelv4)[[3]] * x2 + coef(modelv4)[[4]] * x2_sq + coef(modelv4)[[5]] * x2_cube))
+
+midterm_data |>
+  mutate(prop = y )|>
+  ggplot(aes(y = prop, x = x2, color = x4)) +
+  geom_smooth(method = 'loess', formula = 'y ~ x') +
+  geom_jitter(alpha = .5, height = .03, width = .03) +
+  theme_bw() +
+  geom_line(data = fit_data, color = 'black')
+
+tibble(x2 = midterm_data$x2, 
+       resid =rstandard(modelv4),
+       x4 = midterm_data$x4) |>
+  ggplot(aes(y = resid, x = x2, color = x4)) +
+  geom_jitter(alpha = .5) +
+  geom_smooth(method = 'loess', formula = 'y ~ x') +
+  geom_smooth(method = 'loess', formula = 'y ~ x', inherit.aes = F, aes(y=resid, x = x2), linetype = 2) + 
+  theme_bw() +
+  geom_hline(yintercept = 0)
+```
+
+Notes and thoughts:
+
+1. difference in profile plots vs. joint visualization
+
+
+2. Continuous interactions
+
+```{r}
+library(interactions)
+library(ggplot2)
+
+# Example data
+set.seed(123)
+data <- data.frame(
+  x = rnorm(100),
+  z = rnorm(100)) |>
+  mutate(  y = 5 + 2*x + 3*z + 1.5*x*z
+)
+
+# Fit a linear model with an interaction term
+model <- lm(y ~ x * z, data = data)
+
+# Plot the interaction
+interact_plot(model, pred = x, modx = z, plot.points = TRUE)
+```
+
+3. 3-way interactions and higher
+
+4. Explanatory inference vs. predictive inference
+
+5. AIC (and p-values) do not guarantee the model fit is good
+
+### Back to Count Data
+
+Recall that a GLM has three parts: random component, systematic component, and link function.
+
+So with Poisson regression, it looks like this
+
+\begin{align*}
+y & \sim Poisson(\mu) \\
+\mu & = \exp(\beta_0 + \beta_1 x + ...)\\
+\log(\mu) & = \beta_0 + \beta_1 x + ...\\
+\end{align*}
+
+or with negative binomial
+
+\begin{align*}
+y & \sim NB(\mu, size) \\
+\mu & = \exp(\beta_0 + \beta_1 x + ...)\\
+\log(\mu) & = \beta_0 + \beta_1 x + ...\\
+\end{align*}
+
+- For $\beta_0$, $\exp(\beta_0)$ is the expected count when all other x-values are zero. Note, this intepretation differs somewhat with categorical predictors - especially multiple.
+
+- The other $\beta$ coefficients can be interpreted in a couple of ways.
+    
+    - For two sampling units, where $x_1$ differs by one unit would expect to have a difference in $\log(\mu)$ of $\beta_1$ units.
+    
+    -Note that $\mu = \exp(\beta_0) \times \exp(\beta_1 x)$ and $\exp(\beta_1 x+1) = \exp(\beta_1 x) \times \exp(\beta_1)$, so for two sampling units, where x_1$ differs by one unit would, we'd expect $\mu$ to differ multiplicatively by a factor of $\exp(\beta_1)$.
+
+1. Simulate Poisson data from a model where x is in the range of -2 to 2, $\beta_0 = \log(100)$, $\beta_0 = \log(1.5)$.
+
+- Plot your data (Y ~ X) also plot ($\log(\mu)$ ~ x)
+
+- Fit a Poisson regression model.
+    - Look at residuals, Intepret coefficients, plot model fit + uncertainty
+    
+- Fit a Negative binomial regression model
+     - Look at residuals, Intepret coefficients, plot model fit + uncertainty
+
