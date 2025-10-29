@@ -1,0 +1,58 @@
+---
+title: "Week Eleven"
+format: pdf
+editor: source
+editor_options: 
+  chunk_output_type: console
+---
+
+## Last Week
+
+- Exam Recap
+
+- Probability Distributions for Count Data
+
+- Count Regression
+
+## This Week: GLMs for Count Data & Multicategory data
+
+- Bike Data
+
+
+
+## Next Week:  Multicategory Regression
+
+
+
+
+------------------------------------------------------------------------
+
+```{r}
+#| include: false
+library(tidyverse)
+library(knitr)
+library(arm)
+library(rstanarm)
+library(readr)
+set.seed(10292025)
+```
+
+\newpage
+
+### Multicategory Logit Models
+
+
+\newpage
+
+#### Baseline-Category Logits
+
+
+\newpage
+
+#### Ordinal Data
+
+
+\newpage
+
+#### Latent variable interpretation
+
