@@ -1,0 +1,233 @@
+---
+title: "Week Twelve"
+format: pdf
+editor: source
+editor_options: 
+  chunk_output_type: console
+---
+
+## Last Week
+
+- Lab: Count Regression for Bike Data
+
+- Lecture: Multicategory Regression Models (Theory)
+
+## This Week: Multicategory Regression Models
+
+- Today: Activity
+
+- Thursday: Lab
+
+
+## Next Week:  Generalized Linear Mixed Models
+
+- Tuesday: No Class - Veteran's Day
+
+- Thursday: Activity / Lecture
+
+------------------------------------------------------------------------
+
+```{r}
+#| include: false
+library(tidyverse)
+library(knitr)
+set.seed(11032025)
+```
+
+\newpage
+
+### Multicategory Logit Models
+
+Recall Logistic regression for binary data
+
+$$ Y \sim Multinomial(n, \pi)$$
+
+
+
+$$\log\left(\frac{\pi_i}{\pi_J}\right) = \alpha_i + \beta_j x$$
+
+- We can also directly estimate $\pi_j(x)$ for any set of covariates.
+
+$$\pi_j = \frac{\exp(\alpha_j + \beta_j x)}{\sum_h \exp(\alpha_h + \beta_h x)},$$
+
+where $\alpha_h$ and $\beta_h$ = 0 for the reference category.
+
+
+
+### Data Analysis
+
+The data set contains variables on 200 high school senior students. This dataset was collected by the National Opinion Research Center with funding from the National Center for Education Statistics. 
+
+We will treat `prog` as the outcome variable, where academic is a college preparatory program, general is a basic high school program, and vocation/technical focus on vocational paths.
+
+```{r}
+library(foreign)
+hsb <- read.dta("https://stats.idre.ucla.edu/stat/data/hsbdemo.dta")
+```
+
+1. Let's initially consider the relationship between program type and social economic status. Create a contingency table, run a $\chi^2$ test, and summarize the results.
+
+```{r}
+hsb_tab <- table(hsb$prog, hsb$ses)
+hsb_tab
+
+hsb_chi <- chisq.test(hsb_tab)
+hsb_chi
+
+hsb_chi$observed
+hsb_chi$expected
+```
+
+*This test concludes that it is unlikely that program a student enters and their socioeconomic status are independent. Looking at the observed and expected (under the null hypothesis of independence) that the high ses class tends to see more students in academic programs; whereas the low and middle ses classes tend to see fewer students than expected in academic programs.*
+
+2. Now let's consider a multicategory GLM for program, using SES. For a ML approach you can use `nnet::multinom`. You can also use `brms::brm` for a Bayesian approach, but it might require compiling a stan program. Fit the model, interpret the coefficients, and summarize the results graphically.
+
+```{r}
+library(nnet)
+library(reshape2)
+
+multi_glm <- multinom(prog ~ ses -1 , data = hsb)
+summary(multi_glm)
+
+library(brms)
+
+multi_bayes <- brm(
+  prog ~ ses - 1,
+  data = hsb,
+  family = categorical(link = "logit"),
+  refresh = 0
+)
+
+multi_bayes
+
+```
+
+*The values here are log-odds with respect to the reference case(general), but we can also look at odds ratios (relative risk)*
+
+```{r}
+exp(coef(multi_glm))
+```
+
+
+```{r}
+ses_levels <- tibble(ses = c("low", "middle", "high"))
+
+ses_probs <- predict(multi_glm, newdata = ses_levels, type = "probs", se = TRUE)
+
+melt(ses_probs) |>
+  mutate(Var1 = case_when(
+    Var1 == 1 ~ 'low',
+    Var1 == 2 ~ 'middle',
+    Var1 == 3 ~ 'high'
+  ),
+  ses = ordered(Var1, levels = c('low','middle','high')),
+  program = Var2) |>
+  ggplot( aes(y = value, x = ses, color = program )) + geom_point() +
+  ylab('prob') +
+  theme_bw() +
+  theme(legend.position = 'bottom')
+```
+
+3. Now let's consider a multicategory GLM for program, using a continuous variable: math.  Fit the model, interpret the coefficients, and summarize the results graphically.
+
+```{r}
+hsb |>
+  ggplot(aes(x = math)) +
+  geom_histogram() +
+  theme_bw()
+
+hsb <- hsb |> 
+  mutate(math_centered = math - mean(math))
+```
+
+
+```{r}
+multi_glm <- multinom(prog ~ math_centered , data = hsb)
+summary(multi_glm)
+
+
+multi_bayes <- brm(
+  prog ~ math_centered,
+  data = hsb,
+  family = categorical(link = "logit"),
+  refresh = 0
+)
+
+multi_bayes
+
+```
+
+
+```{r}
+math_levels <- tibble(math_centered = seq(min(hsb$math_centered), max(hsb$math_centered), length.out = 50))
+
+math_probs <- predict(multi_glm, newdata = math_levels, type = "probs", se = TRUE)
+
+melt(math_probs) |>
+  bind_cols(math_centered = rep(math_levels$math_centered, 3)) |>
+  mutate(ses = ordered(Var1, levels = c('low','middle','high')),
+  program = Var2) |>
+  ggplot( aes(y = value, x = math_centered, color = program )) + geom_line() +
+  ylab('prob') +
+  theme_bw() +
+  theme(legend.position = 'bottom') +
+  ylim(0,1)
+```
+
+### Ordinal Models
+
+We can also use the `hsb` dataset to fit ordinal regression models
+
+```{r}
+hsb <- hsb |>
+  mutate(ses = ordered(ses, levels = c('low','middle','high')))
+
+hsb |>
+  ggplot(aes(x = math_centered, y =ses, color = ses)) +
+  geom_violin() +
+  geom_boxplot(width = .25) +
+  geom_jitter() +
+  theme_bw() +
+  theme(legend.position ='none')
+
+```
+
+
+```{r}
+library(MASS)
+library(rstanarm)
+ordinal_glm <- polr(ses ~ math_centered, data = hsb, method = 'logistic')
+ordinal_glm
+
+ordinal_bayes <- brm(
+  ses ~ math_centered,
+  data = hsb,
+  family = cumulative(link = "logit"),
+  refresh = 0
+)
+
+print(ordinal_bayes)
+```
+
+Recall, we are modeling $$logit[P(Y \leq J)] = \alpha_j + \beta x$$
+
+- `invlogit(-1.25)` = `r invlogit(-1.25)` corresponds to the probability of the low class (at math_score = 0)
+
+- `invlogit(.94)` = `r invlogit(.94)` corresponds to the probability of the low or middle class (at math_score = 0)
+
+```{r}
+math_levels <- tibble(math_centered = seq(min(hsb$math_centered), max(hsb$math_centered), length.out = 50))
+
+math_probs <- predict(ordinal_glm, newdata = math_levels, type = "probs", se = TRUE)
+
+melt(math_probs) |>
+  bind_cols(math_centered = rep(math_levels$math_centered, 3)) |>
+  mutate(ses = ordered(Var2, levels = c('low','middle','high'))) |>
+  ggplot( aes(y = value, x = math_centered, color = ses )) + geom_line() +
+  ylab('prob') +
+  theme_bw() +
+  theme(legend.position = 'bottom') + 
+  ylim(0,1)
+
+```
+
