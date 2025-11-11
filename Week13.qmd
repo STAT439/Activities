@@ -1,0 +1,142 @@
+---
+title: "Week Thirteen"
+format: pdf
+editor: source
+editor_options: 
+  chunk_output_type: console
+---
+
+## Last Week
+
+- Multicategory Data
+  - Multicategory Regression
+  - Ordinal Regression
+
+
+## This Week: Introduction to Correlated Data
+
+- Tuesday: Veteran's Day
+
+- Thursday:
+  - Class Recap
+  - Lecture on Correlated Data
+
+
+
+## Next Week:  Multicategory Regression
+
+- Models for Matched Pairs (Ch. 8)
+
+- Modeling Correlated, Clustered Responses (Ch. 9)
+
+- Random Effects: Generalized Linear Mixed Models (Ch. 10)
+
+
+------------------------------------------------------------------------
+
+```{r}
+#| include: false
+library(tidyverse)
+library(knitr)
+library(arm)
+library(rstanarm)
+library(readr)
+set.seed(10292025)
+```
+
+\newpage
+
+## Class Recap
+
+- Week 1. Course Overview
+
+
+\vfill
+
+---
+
+- Week 2. Inference for Proportions
+
+
+
+\vfill
+---
+
+- Week 3. Bayesian Inference for Proportions
+
+
+
+
+\vfill
+---
+
+\newpage
+
+- Week 4 & 5. Contingency Tables
+
+\vfill
+
+\vfill
+---
+
+- Week 6 & 7. GLM: Binary Regression
+
+
+\vfill
+
+\vfill
+---
+
+- Week 8. Midterm Exam
+
+---
+
+\newpage
+
+- Week 9 & 10. GLM: Count Regression
+
+
+
+\vfill
+---
+
+- Week 11 & 12. GLM: Multicategory Data
+
+
+
+\vfill
+---
+
+- Week 13 & 14. Models for Correlated Categorical Data
+
+- Week 15. Fall Break
+
+- Week 16. Machine Learning Tools for Classification
+
+- Week 17. Final Exam
+
+\newpage
+
+### Correlated Data: Matched Pairs
+
+
+
+
+\newpage
+
+### Correlated Data: Rater Agreement
+
+
+
+\newpage
+
+
+### Modeling Correlated Data: Hypothetical Example
+
+
+
+\newpage
+
+### Modeling Correlated Data: Fixed and Random Effects
+
+
